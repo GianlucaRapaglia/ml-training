@@ -13,10 +13,10 @@ from sklearn.model_selection import train_test_split
 
 import warnings
 
-df_train_filepath = r'C:\Users\Rapaglia\OneDrive\Desktop\training\ml\dataset\train.csv'
+df_train_filepath = r'.\dataset\train.csv'
 df_train = pd.read_csv(df_train_filepath)
 
-df_test_filepath = r'C:\Users\Rapaglia\OneDrive\Desktop\training\ml\dataset\test.csv'
+df_test_filepath = r'.\dataset\test.csv'
 df_test = pd.read_csv(df_test_filepath)
 
 df_train.head()
@@ -516,15 +516,17 @@ class FeatureUnion_df(TransformerMixin, BaseEstimator):
     transformer_list: list of Pipelines
 
     '''
-    def __init__(self, transformer_list, n_jobs=None, transformer_weights=None, verbose=False):
+    def __init__(self, transformer_list, n_jobs=None, transformer_weights=None, verbose=False, **kwargs):
         self.transformer_list = transformer_list
         self.n_jobs = n_jobs
         self.transformer_weights = transformer_weights
         self.verbose = verbose  # these are necessary to work inside of GridSearch or similar
+        self.kwargs = kwargs
         self.feat_un = FeatureUnion(self.transformer_list, 
                                     n_jobs=self.n_jobs, 
                                     transformer_weights=self.transformer_weights, 
-                                    verbose=self.verbose)
+                                    verbose=self.verbose,
+                                    **self.kwargs)
         
     def fit(self, X, y=None):
         self.feat_un.fit(X)
@@ -634,7 +636,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 import matplotlib.pyplot as plt
 import seaborn as sns
-%matplotlib inline
+#%matplotlib inline
 
 def cv_score(df_train, y_train, kfolds, pipeline):
     oof = np.zeros(len(df_train))
@@ -745,3 +747,5 @@ lasso_pred = lasso_pipe.predict(test_set)
 plot_predictions(test_set, y_test, lasso_pred)
 
 plot_predictions(test_set, y_test, lasso_pred, feature='GrLivArea')
+
+plt.show()
