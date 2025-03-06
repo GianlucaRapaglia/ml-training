@@ -1,0 +1,7 @@
+# Ignore venv folder
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.idea/
+.vscode/
